@@ -7,6 +7,8 @@ use uefi::prelude::*;
 fn main() -> Status {
     uefi::println!("InfinitBoot loaded!");
 
+    kernel::kernel_main();
+
     loop {}
 }
 
