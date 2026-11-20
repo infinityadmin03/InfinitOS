@@ -6,8 +6,12 @@ use uefi::prelude::*;
 #[entry]
 fn main() -> Status {
     uefi::println!("InfinitBoot loaded!");
+    uefi::println!("Entering kernel...");
 
-    kernel::kernel_main();
+    let info = kernel::kernel_main();
+
+    uefi::println!("Kernel: {}", info.name);
+    uefi::println!("Version: {}", info.version);
 
     loop {}
 }
