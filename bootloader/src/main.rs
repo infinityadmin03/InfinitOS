@@ -36,7 +36,17 @@ fn main() -> Status {
     };
 
 
-    kernel::kernel_main(&boot_info);
+    let kernel_state = kernel::kernel_main(&boot_info);
+
+    uefi::println!(
+      "Kernel memory: {} MB",
+       kernel_state.total_memory / 1024 / 1024
+    );
+
+    uefi::println!(
+      "Kernel regions: {}",
+      kernel_state.memory_regions
+    );
 
     loop {}
 }
