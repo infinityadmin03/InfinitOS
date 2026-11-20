@@ -1,6 +1,7 @@
 #![no_main]
 #![no_std]
 
+use common::BootInfo;
 use uefi::prelude::*;
 
 #[entry]
@@ -8,10 +9,12 @@ fn main() -> Status {
     uefi::println!("InfinitBoot loaded!");
     uefi::println!("Entering kernel...");
 
-    let info = kernel::kernel_main();
+    let boot_info = BootInfo {
+        bootloader_name: "InfinitBoot",
+        version: 1,
+    };
 
-    uefi::println!("Kernel: {}", info.name);
-    uefi::println!("Version: {}", info.version);
+    kernel::kernel_main(&boot_info);
 
     loop {}
 }

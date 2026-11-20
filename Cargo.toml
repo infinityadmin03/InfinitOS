@@ -1,7 +1,8 @@
 [workspace]
 members = [
     "bootloader",
-    "kernel"
+    "kernel",
+    "common"
 ]
 
 resolver = "2"

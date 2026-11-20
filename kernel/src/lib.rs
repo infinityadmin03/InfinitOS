@@ -1,13 +1,7 @@
 #![no_std]
 
-pub struct KernelInfo {
-    pub name: &'static str,
-    pub version: &'static str,
-}
+use common::BootInfo;
 
-pub fn kernel_main() -> KernelInfo {
-    KernelInfo {
-        name: "InfinitOS",
-        version: "0.1",
-    }
+pub fn kernel_main(info: &BootInfo) {
+    let _ = info;
 }
