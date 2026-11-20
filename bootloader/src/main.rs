@@ -11,9 +11,10 @@ fn main() -> Status {
 
     let boot_info = BootInfo {
      bootloader_name: "InfinitBoot",
-     boot_protocol_version: 1,
+     version: 1,
      memory: MemoryInfo {
        total_memory: 0,
+       memory_regions: 0,
        },
     };
 
