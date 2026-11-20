@@ -16,11 +16,21 @@ fn main() -> Status {
 
     uefi::println!("Memory regions: {}", memory_regions);
 
+    let mut total_memory = 0u64;
+
+    for region in memory_map.entries() {
+      if region.ty == uefi::mem::memory_map::MemoryType::CONVENTIONAL {
+        total_memory += region.page_count * 4096;
+      }
+    }
+
+    uefi::println!("Total memory: {} MB", total_memory / 1024 / 1024);
+
     let boot_info = BootInfo {
      bootloader_name: "InfinitBoot",
      version: 1,
      memory: MemoryInfo {
-       total_memory: 0,
+       total_memory,
        memory_regions,
        },
     };
