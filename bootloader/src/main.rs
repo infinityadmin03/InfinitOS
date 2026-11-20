@@ -6,7 +6,8 @@ use uefi::prelude::*;
 #[entry]
 fn main() -> Status {
     uefi::println!("InfinitBoot loaded!");
-    Status::SUCCESS
+
+    loop {}
 }
 
 #[panic_handler]
