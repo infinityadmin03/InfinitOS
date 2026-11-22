@@ -24,14 +24,17 @@ fn main() -> Status {
 
     let mut total_memory = 0u64;
 
+    let mut region_index = 0usize;
 
     let mut first_region = MemoryRegion {
       start: 0,
       pages: 0,
     };
 
+
+    
     let mut memory_map_info = MemoryMap {
-       count: 1,
+       count: 0,
        regions: [MemoryRegion {
           start: 0,
           pages: 0,
@@ -42,6 +45,17 @@ fn main() -> Status {
 
     for region in memory_map.entries() {
        if region.ty == uefi::mem::memory_map::MemoryType::CONVENTIONAL {
+
+
+       if region_index < MAX_MEMORY_REGIONS {
+          memory_map_info.regions[region_index] = MemoryRegion {
+             start: region.phys_start,
+             pages: region.page_count,
+           };
+
+           region_index += 1;
+        }
+
 
         if first_region.pages == 0 {
           first_region = MemoryRegion {
@@ -58,7 +72,12 @@ fn main() -> Status {
         }
     }
 
-    memory_map_info.regions[0] = first_region;
+    memory_map_info.count = region_index;
+
+    uefi::println!(
+     "Stored regions: {}",
+      memory_map_info.count
+    );
 
     uefi::println!(
       "First region: start={:#x} pages={}",
