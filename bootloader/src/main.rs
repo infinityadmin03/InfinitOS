@@ -1,9 +1,15 @@
 #![no_main]
 #![no_std]
 
-use common::{BootInfo, MemoryInfo, MemoryRegion};
+use common::{
+    BootInfo,
+    MemoryInfo,
+    MemoryMap,
+    MemoryRegion,
+    MAX_MEMORY_REGIONS,
+};
 use uefi::boot;                        
-use uefi::mem::memory_map::{MemoryMap, MemoryType};
+use uefi::mem::memory_map::{MemoryMap as UefiMemoryMap, MemoryType};
 use uefi::prelude::*;
 
 #[entry]
@@ -23,6 +29,16 @@ fn main() -> Status {
       start: 0,
       pages: 0,
     };
+
+    let mut memory_map_info = MemoryMap {
+       count: 1,
+       regions: [MemoryRegion {
+          start: 0,
+          pages: 0,
+        }; MAX_MEMORY_REGIONS],
+    };
+
+    memory_map_info.regions[0] = first_region;
 
     for region in memory_map.entries() {
        if region.ty == uefi::mem::memory_map::MemoryType::CONVENTIONAL {
@@ -53,16 +69,18 @@ fn main() -> Status {
  
     uefi::println!("Total memory: {} MB", total_memory / 1024 / 1024);
 
-    let boot_info = BootInfo {
-     bootloader_name: "InfinitBoot",
-     version: 1,
-     memory: MemoryInfo {
-       total_memory,
-       memory_regions,
-       },
 
+    let boot_info = BootInfo {
+      bootloader_name: "InfinitBoot",
+      version: 1,
+      memory: MemoryInfo {
+         total_memory,
+         memory_regions,
+        },
        first_region,
+       memory_map: memory_map_info,
     };
+
 
 
     let kernel_state = kernel::kernel_main(&boot_info);
