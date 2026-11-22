@@ -115,6 +115,12 @@ fn main() -> Status {
        kernel_state.stored_regions
     );
 
+    uefi::println!(
+        "Kernel second region: start={:#x} pages={}",
+        kernel_state.second_region_start,
+        kernel_state.second_region_pages
+    );
+
 
     uefi::println!(
       "Kernel regions: {}",

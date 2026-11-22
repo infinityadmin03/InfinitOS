@@ -8,6 +8,8 @@ pub struct KernelState {
     pub first_region_start: u64,
     pub first_region_pages: u64,
     pub stored_regions: usize,
+    pub second_region_start: u64,
+    pub second_region_pages: u64,
 }
 
 pub fn kernel_main(info: &BootInfo) -> KernelState {
@@ -17,5 +19,8 @@ pub fn kernel_main(info: &BootInfo) -> KernelState {
         first_region_start: info.first_region.start,
         first_region_pages: info.first_region.pages,
         stored_regions: info.memory_map.count,
+
+        second_region_start: info.memory_map.regions[1].start,
+        second_region_pages: info.memory_map.regions[1].pages,
     }
 }
