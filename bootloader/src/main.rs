@@ -38,7 +38,7 @@ fn main() -> Status {
         }; MAX_MEMORY_REGIONS],
     };
 
-    memory_map_info.regions[0] = first_region;
+    
 
     for region in memory_map.entries() {
        if region.ty == uefi::mem::memory_map::MemoryType::CONVENTIONAL {
@@ -58,6 +58,7 @@ fn main() -> Status {
         }
     }
 
+    memory_map_info.regions[0] = first_region;
 
     uefi::println!(
       "First region: start={:#x} pages={}",
