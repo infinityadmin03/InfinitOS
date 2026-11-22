@@ -1,7 +1,7 @@
 #![no_main]
 #![no_std]
 
-use common::{BootInfo, MemoryInfo};
+use common::{BootInfo, MemoryInfo, MemoryRegion};
 use uefi::boot;                        
 use uefi::mem::memory_map::{MemoryMap, MemoryType};
 use uefi::prelude::*;
@@ -18,12 +18,39 @@ fn main() -> Status {
 
     let mut total_memory = 0u64;
 
+
+    let mut first_region = MemoryRegion {
+      start: 0,
+      pages: 0,
+    };
+
     for region in memory_map.entries() {
-      if region.ty == uefi::mem::memory_map::MemoryType::CONVENTIONAL {
+       if region.ty == uefi::mem::memory_map::MemoryType::CONVENTIONAL {
+
+        if first_region.pages == 0 {
+          first_region = MemoryRegion {
+             start: region.phys_start,
+             pages: region.page_count,
+            };
+        }
+
+
+
         total_memory += region.page_count * 4096;
-      }
+
+
+        }
     }
 
+
+    uefi::println!(
+      "First region: start={:#x} pages={}",
+      first_region.start,
+      first_region.pages
+    );
+
+
+ 
     uefi::println!("Total memory: {} MB", total_memory / 1024 / 1024);
 
     let boot_info = BootInfo {
@@ -33,6 +60,8 @@ fn main() -> Status {
        total_memory,
        memory_regions,
        },
+
+       first_region,
     };
 
 
