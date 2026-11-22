@@ -111,6 +111,12 @@ fn main() -> Status {
     );
 
     uefi::println!(
+      "Kernel stored regions: {}",
+       kernel_state.stored_regions
+    );
+
+
+    uefi::println!(
       "Kernel regions: {}",
       kernel_state.memory_regions
     );
